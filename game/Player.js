@@ -1,8 +1,5 @@
 import { Block } from "./Skill.js"
 
-class Skill {
-}
-
 export default class Player {
     constructor({}) {
         this.queue = []
@@ -20,7 +17,11 @@ export default class Player {
         this.blocks = new Map()
     }
 
-    // stats and skills
+    // stats, blocks and skills
+
+    getStat(stat) {
+        return this.stats[block]
+    }
 
     getBlock(block) {
         if (!this.blocks.has(block)) {

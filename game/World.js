@@ -7,7 +7,7 @@ class Node {
     }
 }
 
-export default class Map {
+export default class World {
     constructor({width, height}) {
         this.width = width
         this.height = height

@@ -1,20 +1,48 @@
-import Action from "./Action.js"
-import Map from "./Map.js"
-import Player from "./Player.js"
-import Skill, {Block} from "./Skill.js"
+import Action from "./game/Action.js"
+import World from "./game/World.js"
+import Player from "./game/Player.js"
+import Skill, {Block} from "./game/Skill.js"
+import Roll, { SkillRoll } from "./game/Roll.js"
 
 // HOW IT SHOULD WORK -->
 
 // set up
 
-let spellCraft = {}
+const str = "str"
+const dex = "dex"
+const wil = "wil"
+const per = "pwer"
 
-let player = new Player({})
+let spellCraft = {}
 
 let pyromancy = {
     block: spellCraft,
 }
 
+let edenWhite = {}
+
+let fireBolt = {
+    cost: {},
+    components: [
+        {
+            roll: new SkillRoll({
+                skill: pyromancy,
+                stat: dex
+            }),
+            area: -1,
+            source: -1,
+            effects: [
+                {
+                    effect: "damage",
+                    val: 1
+                }
+            ],
+            subcomponents: []
+        }
+    ]
+}
+
+let player = new Player(edenWhite)
 let s = player.getSkill(pyromancy)
 s.levelUp(10)
 

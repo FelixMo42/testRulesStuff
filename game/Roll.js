@@ -1,5 +1,5 @@
-import D from "./D"
-import Player from "./Player"
+import D from "./D.js"
+import Player from "./Player.js"
 
 export default class Roll {
     roll() {
@@ -15,6 +15,8 @@ export class NoneRoll {
 
 export class SkillRoll extends Roll {
     constructor({stat, skill}) {
+        super()
+        
         this.stat = stat
         this.skill = skill
     }

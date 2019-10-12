@@ -65,7 +65,20 @@ export default class Skill {
         return this.block
     }
 
-    getLevel(bonus=0) {
-        return  this.getBlock().getLevel() + this.getRawLevel() + bonus
+    getPlayer() {
+        return this.player
+    }
+
+    getLevel(stat) {
+        let level = 0
+        
+        level += this.getRawLevel()
+        level += this.getBlock().getLevel() 
+
+        if (stat) {
+            level += this.getPlayer().getStat(stat)
+        }
+
+        return level
     }
 }
