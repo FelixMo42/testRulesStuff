@@ -1,24 +1,12 @@
-export class Area {
+import D from "./D.js"
 
-}
-
-export class Target {
-
-}
-
-export class Effect {
-
-}
-
-export class Component {
-    constructor({roll, area, target, effect, subcomponents}) {
-        this.roll = roll //new Roll()
-        this.area = area //new Area()
-        this.target = target //new Target()
-
-        this.effects = effect || []
-        this.subcomponents = subcomponents || []
-    }
+export const Component = {
+    source: Symbol("source"),
+    roll: Symbol("roll"),
+    target: Symbol("target"),
+    origin: Symbol("origin"),
+    area: Symbol("area"),
+    effect: Symbol("effect")
 }
 
 export default class Action {
@@ -28,30 +16,12 @@ export default class Action {
         this.components = components
     }
 
-    activate(component, parent) {
-        let roll = component.roll(this.source, parent)
-        let target = component.target(this.source, parent)
+    prepare(targets) {
 
-        component.area.forEach(target => {
-            component.effects.forEach(effect => {
-                target.affect({
-                    dc: roll,
-                    source: this,
-                    effect: effect
-                })
-            })
-        })
-
-        component.subcomponents.forEach(subcomponent => {
-            this.activate(subcomponent, {
-                roll: roll,
-                target: target
-            })
-        })
     }
 
     cheak() {
-
+        return true
     }
 
     use() {
@@ -59,12 +29,92 @@ export default class Action {
             return false
         }
 
-        this.activate(this.cost)
+        let rootComponent = {
+            source: this.source
+        }
+
+        //this.activate(this.cost, rootComponent)
 
         this.components.forEach(component => {
-            this.activate(component, {})
+            this.activate(component, rootComponent)
         })
 
         return true
+    }
+
+    // component stuff
+
+    getComponentSource(source, component) {
+        if (!source) {
+            return component.parent.source
+        }
+    }
+
+    getComponentRoll(roll, component) {
+        if (!roll) {
+            return component.parent.roll
+        }
+
+        let base = D(20)
+
+        if ("skill" in roll) {
+            base += component.source.getSkill(roll.skill)
+        }
+
+        if ("bonus" in roll) {
+            base += roll.bonus
+        }
+
+        return base
+    }
+
+    getComponentTarget(target, component) {
+        if (!target) {
+            return component.parent.target
+        }
+
+        let area = this.getComponentArea(target.area, component)
+    }
+
+    getComponentOrigin(origin, component) {
+        if (!origin) {
+            return component.parent.origin
+        }
+    }
+
+    getComponentArea(area, component) {
+        if (!area) {
+            return component.parent.area
+        }
+
+        let targets = []
+
+
+        return targets
+    }
+
+    getComponentEffect(effect, component) {
+        if (!effect) {
+            return component.parent.effect
+        }
+    }
+
+    activate(component, parent) {
+        let data = {parent: parent}
+
+        data.source = this.getComponentSource(component.source, data)
+        data.roll   = this.getComponentRoll(component.roll, data)
+        data.target = this.getComponentTarget(component.target, data)
+        data.origin = this.getComponentOrigin(component.origin, data)
+        data.area   = this.getComponentArea(component.area, data)
+        data.effect = this.getComponentEffect(component.effect, data)
+
+        data.area.forEach(target => {
+            target.affect(data.effect)
+        })
+
+        component.subcomponents.forEach(subcomponent => {
+            this.activate(subcomponent, data)
+        })
     }
 }

@@ -1,6 +1,16 @@
 import Vec2 from "./Vec2.js"
+import Tile from "./Tile.js"
 
 class Node {
+    constructor({world, position, tile}) {
+        this.world = world
+        this.position = position
+        this.tile = new Tile({
+            ...tile,
+            node: this
+        })
+    }
+
     setPlayer(player) {
         player.setNode(this)
         this.player = player
@@ -8,7 +18,7 @@ class Node {
 }
 
 export default class World {
-    constructor({width, height}) {
+    constructor({width, height, baseTile}) {
         this.width = width
         this.height = height
 
@@ -18,7 +28,8 @@ export default class World {
             for (var y = 0; y < height; y++) {
                 this.nodes[x][y] = new Node({
                     position: new Vec2(x, y),
-                    map: this
+                    tile: baseTile || {},
+                    world: this
                 })
             }
         }
@@ -36,11 +47,7 @@ export default class World {
         return x >= 0 && y >= 0 && x < this.getWidth() && y < this.getHeight()
     }
 
-    get({x, y}) {
-        if (this.isValid({x: x, y: y})) {
-            return this.nodes[x][y]
-        } else {
-            console.error("invalid x, y")
-        }
+    getNode({x, y}) {
+        return this.nodes[x][y]
     }
 }

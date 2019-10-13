@@ -1,4 +1,4 @@
-import Action from "./game/Action.js"
+import Action, { Component } from "./game/Action.js"
 import World from "./game/World.js"
 import Player from "./game/Player.js"
 import Skill, {Block} from "./game/Skill.js"
@@ -24,29 +24,53 @@ let edenWhite = {}
 let fireBolt = {
     cost: {},
     components: [
-        {
-            roll: new SkillRoll({
-                skill: pyromancy,
-                stat: dex
-            }),
-            area: -1,
-            source: -1,
-            effects: [
-                {
-                    effect: "damage",
-                    val: 1
-                }
-            ],
+        { // componant
+            roll: {
+                skill: pyromancy
+            },
+
+            target: {
+                area: {
+                    style: "ball",
+                    radius: 10,
+                    origin: Component.origin,
+                },
+                select: {
+                    player: true,
+                    type: "player",
+                    num: 1
+                },
+            },
+
+            area: {
+                style: "ball",
+                radius: 1,
+                target: Component.target
+            },
+
+            effect: {
+                dc: 1,
+                effect: "damage",
+                val: 1
+            },
+
             subcomponents: []
         }
     ]
 }
 
-let player = new Player(edenWhite)
-let s = player.getSkill(pyromancy)
-s.levelUp(10)
+let player = new Player({})
 
-console.log( player.getSkill(pyromancy).getLevel() )
+let action = new Action({
+    ...fireBolt,
+    source: player
+})
+console.log( action.use() )
+
+//let player = new Player(edenWhite)
+//player.learn( fireBolt )
+
+
 
 /*
 

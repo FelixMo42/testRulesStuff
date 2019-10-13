@@ -1,4 +1,5 @@
 import { Block } from "./Skill.js"
+import Action from "./Action.js"
 
 export default class Player {
     constructor({}) {
@@ -15,12 +16,19 @@ export default class Player {
         }
 
         this.blocks = new Map()
+        this.actions = new Map()
+    }
+
+    // outher
+
+    affect() {
+        
     }
 
     // stats, blocks and skills
 
     getStat(stat) {
-        return this.stats[block]
+        return this.stats[stat]
     }
 
     getBlock(block) {
@@ -36,6 +44,19 @@ export default class Player {
 
     getSkill(skill) {
         return this.getBlock(skill.block).getSkill(skill)
+    }
+
+    // actions
+
+    learnAction(action) {
+        this.actions.set(new Action({
+            ...action,
+            source: this
+        }))
+    }
+
+    getAction(action) {
+        return this.actions.get(action)
     }
 
     // node

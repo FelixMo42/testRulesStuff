@@ -22,6 +22,8 @@ export class SkillRoll extends Roll {
     }
 
     roll(source) {
+        //TODO make sure its proper type of source
+        
         let base = super.roll()
 
         base += source.getSkill(this.skill).getLevel()
