@@ -24,7 +24,7 @@ let edenWhite = {}
 let fireBolt = {
     cost: {},
     components: [
-        { // componant
+        { // components
             roll: {
                 skill: pyromancy
             },
@@ -59,12 +59,19 @@ let fireBolt = {
     ]
 }
 
-let player = new Player({})
+let world = new World({
+    width: 10,
+    height: 10
+})
+
+let player = new Player(edenWhite)
+world.getNode({x: 0, y: 0}).setPlayer(player)
 
 let action = new Action({
     ...fireBolt,
     source: player
 })
+
 console.log( action.use() )
 
 //let player = new Player(edenWhite)

@@ -21,7 +21,7 @@ export default class Player {
 
     // outher
 
-    affect() {
+    affect(effect) {
         
     }
 

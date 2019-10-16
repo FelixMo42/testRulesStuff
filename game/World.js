@@ -1,7 +1,7 @@
 import Vec2 from "./Vec2.js"
 import Tile from "./Tile.js"
 
-class Node {
+export class Node {
     constructor({world, position, tile}) {
         this.world = world
         this.position = position
@@ -11,9 +11,37 @@ class Node {
         })
     }
 
+    getNode() {
+        return this
+    }
+
+    affect(effect) {
+        this.getTile().affect(effect)
+
+        if (this.hasPlayer()) {
+            this.getPlayer().affect(effect)
+        }
+    }
+
+    // player
+
+    hasPlayer() {
+        return "player" in this
+    }
+
     setPlayer(player) {
         player.setNode(this)
         this.player = player
+    }
+
+    getPlayer() {
+        return this.player
+    }
+
+    // tile
+
+    getTile() {
+        return this.tile
     }
 }
 

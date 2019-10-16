@@ -2,10 +2,10 @@ import D from "./D.js"
 
 export const Component = {
     source: Symbol("source"),
-    roll: Symbol("roll"),
+    roll:   Symbol("roll"),
     target: Symbol("target"),
     origin: Symbol("origin"),
-    area: Symbol("area"),
+    area:   Symbol("area"),
     effect: Symbol("effect")
 }
 
@@ -17,15 +17,22 @@ export default class Action {
     }
 
     prepare(targets) {
+        if (!this.check(targets)) {
+            //TODO: what if check fails
+        }
 
+        return () => {
+            this.use(targets)
+        }
     }
 
-    cheak() {
+    check(targets) {
+        //TODO: check targets
         return true
     }
 
-    use() {
-        if (!this.cheak()) {
+    use(targets) {
+        if (!this.check(targets)) {
             return false
         }
 
@@ -58,7 +65,7 @@ export default class Action {
         let base = D(20)
 
         if ("skill" in roll) {
-            base += component.source.getSkill(roll.skill)
+            base += component.source.getSkill(roll.skill).getLevel()
         }
 
         if ("bonus" in roll) {
@@ -89,6 +96,7 @@ export default class Action {
 
         let targets = []
 
+        targets.push( component.source.getNode() )        
 
         return targets
     }
@@ -97,6 +105,8 @@ export default class Action {
         if (!effect) {
             return component.parent.effect
         }
+
+        return {}
     }
 
     activate(component, parent) {
