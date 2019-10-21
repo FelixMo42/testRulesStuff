@@ -1,8 +1,6 @@
-import Action, { Component } from "./game/Action.js"
+import Action, { Component, Effects } from "./game/Action.js"
 import World from "./game/World.js"
 import Player from "./game/Player.js"
-import Skill, {Block} from "./game/Skill.js"
-import Roll, { SkillRoll } from "./game/Roll.js"
 
 // HOW IT SHOULD WORK -->
 
@@ -30,16 +28,12 @@ let fireBolt = {
             },
 
             target: {
-                area: {
-                    style: "ball",
-                    radius: 10,
-                    origin: Component.origin,
-                },
-                select: {
-                    player: true,
-                    type: "player",
-                    num: 1
-                },
+                style: "ball",
+                radius: 10,
+                origin: Component.origin,
+                //player: true,
+                type: "player",
+                num: 1
             },
 
             area: {
@@ -49,9 +43,15 @@ let fireBolt = {
             },
 
             effect: {
-                dc: 1,
-                effect: "damage",
-                val: 1
+                type: Effects.damage,
+                dc: {
+                    base: Component.roll,
+                    stat: dex
+                },
+                damage: {
+                    base: Component.roll,
+                    stat: wil
+                }
             },
 
             subcomponents: []
@@ -72,7 +72,7 @@ let action = new Action({
     source: player
 })
 
-console.log( action.use() )
+console.log( action.prepare()() )
 
 //let player = new Player(edenWhite)
 //player.learn( fireBolt )

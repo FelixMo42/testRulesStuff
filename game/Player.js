@@ -22,7 +22,7 @@ export default class Player {
     // outher
 
     affect(effect) {
-        
+       
     }
 
     // stats, blocks and skills
